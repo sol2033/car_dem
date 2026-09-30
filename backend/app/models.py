@@ -42,11 +42,15 @@ class Photo(Base):
     __tablename__ = "photos"
 
     id = Column(Integer, primary_key=True)
-    path = Column(String(200), nullable=False)
+    filename = Column(String(200), nullable=False)
     assessment_id = Column(Integer, ForeignKey("assessments.id"), nullable=False)
 
     assessment = relationship("Assessment", back_populates="photos")
     damages = relationship("Damage", back_populates="photo")
+
+    @property
+    def url(self):
+        return "/uploads/" + self.filename
 
 
 class Damage(Base):
