@@ -5,3 +5,5 @@ psycopg2-binary
 pydantic-settings
 python-multipart
 email-validator
+huggingface_hub
+ultralytics

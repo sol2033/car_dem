@@ -1,6 +1,9 @@
+import os
+
 from sqlalchemy.orm import Session
 
-from app import models, schemas
+from app import detector, models, schemas
+from app.config import settings
 
 
 def get_users(db: Session):
@@ -32,9 +35,22 @@ def update_user(db: Session, user: models.User, data: schemas.UserCreate):
     return user
 
 
+def delete_files(filenames: list[str]):
+    for filename in filenames:
+        path = os.path.join(settings.upload_dir, filename)
+        if os.path.exists(path):
+            os.remove(path)
+
+
 def delete_user(db: Session, user: models.User):
+    filenames = [
+        photo.filename
+        for assessment in user.assessments
+        for photo in assessment.photos
+    ]
     db.delete(user)
     db.commit()
+    delete_files(filenames)
 
 
 def get_assessments(db: Session, user_id: int | None = None):
@@ -56,6 +72,10 @@ def create_assessment(
     )
     for filename in filenames:
         assessment.photos.append(models.Photo(filename=filename))
+    for photo in assessment.photos:
+        path = os.path.join(settings.upload_dir, photo.filename)
+        for found in detector.find_damages(path):
+            assessment.damages.append(models.Damage(photo=photo, **found))
     db.add(assessment)
     db.commit()
     db.refresh(assessment)
@@ -74,8 +94,10 @@ def update_assessment(
 
 
 def delete_assessment(db: Session, assessment: models.Assessment):
+    filenames = [photo.filename for photo in assessment.photos]
     db.delete(assessment)
     db.commit()
+    delete_files(filenames)
 
 
 def get_damages(db: Session, assessment_id: int):

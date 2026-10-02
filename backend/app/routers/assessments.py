@@ -26,13 +26,6 @@ def save_photo(photo: UploadFile):
     return filename
 
 
-def delete_files(filenames: list[str]):
-    for filename in filenames:
-        path = os.path.join(settings.upload_dir, filename)
-        if os.path.exists(path):
-            os.remove(path)
-
-
 @router.post("", response_model=schemas.AssessmentOut, status_code=201)
 def create_assessment(
     brand: str = Form(min_length=1, max_length=50),
@@ -75,6 +68,4 @@ def update_assessment(
 @router.delete("/{assessment_id}", status_code=204)
 def delete_assessment(assessment_id: int, db: Session = Depends(get_db)):
     assessment = get_assessment_or_404(assessment_id, db)
-    filenames = [photo.filename for photo in assessment.photos]
     crud.delete_assessment(db, assessment)
-    delete_files(filenames)
