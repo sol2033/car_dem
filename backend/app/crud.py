@@ -76,3 +76,43 @@ def update_assessment(
 def delete_assessment(db: Session, assessment: models.Assessment):
     db.delete(assessment)
     db.commit()
+
+
+def get_damages(db: Session, assessment_id: int):
+    return (
+        db.query(models.Damage)
+        .filter(models.Damage.assessment_id == assessment_id)
+        .order_by(models.Damage.id)
+        .all()
+    )
+
+
+def get_damage(db: Session, damage_id: int):
+    return db.get(models.Damage, damage_id)
+
+
+def create_damage(db: Session, assessment_id: int, data: schemas.DamageCreate):
+    damage = models.Damage(
+        type=data.type,
+        severity=data.severity,
+        comment=data.comment,
+        assessment_id=assessment_id,
+    )
+    db.add(damage)
+    db.commit()
+    db.refresh(damage)
+    return damage
+
+
+def update_damage(db: Session, damage: models.Damage, data: schemas.DamageCreate):
+    damage.type = data.type
+    damage.severity = data.severity
+    damage.comment = data.comment
+    db.commit()
+    db.refresh(damage)
+    return damage
+
+
+def delete_damage(db: Session, damage: models.Damage):
+    db.delete(damage)
+    db.commit()
