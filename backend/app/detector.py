@@ -1,8 +1,6 @@
-from huggingface_hub import hf_hub_download
 from ultralytics import YOLO
 
-MODEL_REPO = "shawnmichael/yolo-car-damage-detection"
-MODEL_FILE = "best_dts.pt"
+MODEL_PATH = "weights/best_dts.pt"
 MIN_CONFIDENCE = 0.25
 
 DAMAGE_TYPES = {
@@ -18,8 +16,7 @@ model = None
 def get_model():
     global model
     if model is None:
-        path = hf_hub_download(MODEL_REPO, MODEL_FILE)
-        model = YOLO(path)
+        model = YOLO(MODEL_PATH)
     return model
 
 
