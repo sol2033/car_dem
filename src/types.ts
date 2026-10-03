@@ -8,11 +8,20 @@ export interface Car {
   year: number
 }
 
+export interface DamageBox {
+  x: number
+  y: number
+  width: number
+  height: number
+}
+
 export interface Damage {
   id: number
   type: DamageType
   severity: DamageSeverity
   comment: string
+  photo?: string
+  box?: DamageBox
 }
 
 export interface User {

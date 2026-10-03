@@ -1,8 +1,9 @@
 import { useState } from 'react'
-import { Badge, Button, Group, Image, Paper, Select, SimpleGrid, Stack, Text, Textarea, Title } from '@mantine/core'
+import { Badge, Button, Group, Paper, Select, SimpleGrid, Stack, Text, Textarea, Title } from '@mantine/core'
 import { useNavigate, useParams } from 'react-router-dom'
 import DamageItem from '../components/DamageItem'
-import { damageSeverities, damageTypes, getAssessmentById, getUserName } from '../data/mockData'
+import PhotoWithBoxes from '../components/PhotoWithBoxes'
+import { damageColors, damageSeverities, damageTypes, getAssessmentById, getUserName } from '../data/mockData'
 import type { Damage, DamageSeverity, DamageType } from '../types'
 
 function AssessmentDetailsPage() {
@@ -65,11 +66,23 @@ function AssessmentDetailsPage() {
         Фотографии
       </Title>
       {assessment.photos.length > 0 ? (
-        <SimpleGrid cols={{ base: 1, sm: 2, md: 3 }} spacing="md" mb="xl">
-          {assessment.photos.map((photo) => (
-            <Image key={photo} src={photo} height={200} radius="md" alt="Фото автомобиля" />
-          ))}
-        </SimpleGrid>
+        <div>
+          <Group gap="xs" mb="sm">
+            <Text size="sm" c="dimmed">
+              Цвет рамки на фото — тип повреждения:
+            </Text>
+            {damageTypes.map((damageType) => (
+              <Badge key={damageType} color={damageColors[damageType]} variant="outline">
+                {damageType}
+              </Badge>
+            ))}
+          </Group>
+          <SimpleGrid cols={{ base: 1, sm: 2, md: 3 }} spacing="md" mb="xl">
+            {assessment.photos.map((photo) => (
+              <PhotoWithBoxes key={photo} photo={photo} damages={damages} />
+            ))}
+          </SimpleGrid>
+        </div>
       ) : (
         <Text c="dimmed" mb="xl">
           Фотографии не загружены

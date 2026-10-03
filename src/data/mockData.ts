@@ -10,6 +10,13 @@ export const damageTypes: DamageType[] = ['Скол', 'Вмятина', 'Цар�
 
 export const damageSeverities: DamageSeverity[] = ['Лёгкая', 'Средняя', 'Сильная']
 
+export const damageColors: Record<DamageType, string> = {
+  Скол: 'orange',
+  Вмятина: 'red',
+  Царапина: 'yellow',
+  Трещина: 'blue',
+}
+
 export const currentUserId = 1
 
 export const users: User[] = [
@@ -37,6 +44,8 @@ export const assessments: Assessment[] = [
         type: 'Царапина',
         severity: 'Лёгкая',
         comment: 'Несколько царапин на заднем бампере',
+        photo: '/cars/car1.jpg',
+        box: { x: 0.37, y: 0.58, width: 0.14, height: 0.05 },
       },
       {
         id: 3,
@@ -58,6 +67,8 @@ export const assessments: Assessment[] = [
         type: 'Трещина',
         severity: 'Сильная',
         comment: 'Трещина через весь передний бампер после удара',
+        photo: '/cars/car3.jpg',
+        box: { x: 0.34, y: 0.53, width: 0.28, height: 0.12 },
       },
       {
         id: 5,
@@ -102,6 +113,8 @@ export const assessments: Assessment[] = [
         type: 'Вмятина',
         severity: 'Сильная',
         comment: 'Крышка багажника сильно замята, не закрывается',
+        photo: '/cars/car6.jpg',
+        box: { x: 0.55, y: 0.55, width: 0.07, height: 0.1 },
       },
       {
         id: 8,
