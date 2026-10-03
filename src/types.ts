@@ -1,7 +1,5 @@
 export type DamageType = 'Скол' | 'Вмятина' | 'Царапина' | 'Трещина'
 
-export type DamageLocation = 'Бампер' | 'Дверь' | 'Капот' | 'Крыло' | 'Крыша' | 'Багажник'
-
 export type DamageSeverity = 'Лёгкая' | 'Средняя' | 'Сильная'
 
 export interface Car {
@@ -13,7 +11,6 @@ export interface Car {
 export interface Damage {
   id: number
   type: DamageType
-  location: DamageLocation
   severity: DamageSeverity
   comment: string
 }

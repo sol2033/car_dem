@@ -23,9 +23,6 @@ function DamageItem({ damage, onDelete }: DamageItemProps) {
         <div>
           <Group gap="xs" mb="xs">
             <Badge color="blue">{damage.type}</Badge>
-            <Badge color="grape" variant="light">
-              {damage.location}
-            </Badge>
             <Badge color={getSeverityColor(damage.severity)} variant="light">
               {damage.severity}
             </Badge>

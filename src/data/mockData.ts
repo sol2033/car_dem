@@ -1,22 +1,12 @@
 import type {
   Assessment,
   Car,
-  DamageLocation,
   DamageSeverity,
   DamageType,
   User,
 } from '../types'
 
 export const damageTypes: DamageType[] = ['Скол', 'Вмятина', 'Царапина', 'Трещина']
-
-export const damageLocations: DamageLocation[] = [
-  'Бампер',
-  'Дверь',
-  'Капот',
-  'Крыло',
-  'Крыша',
-  'Багажник',
-]
 
 export const damageSeverities: DamageSeverity[] = ['Лёгкая', 'Средняя', 'Сильная']
 
@@ -39,21 +29,18 @@ export const assessments: Assessment[] = [
       {
         id: 1,
         type: 'Вмятина',
-        location: 'Дверь',
         severity: 'Средняя',
         comment: 'Вмятина на передней левой двери, краска не повреждена',
       },
       {
         id: 2,
         type: 'Царапина',
-        location: 'Бампер',
         severity: 'Лёгкая',
         comment: 'Несколько царапин на заднем бампере',
       },
       {
         id: 3,
         type: 'Скол',
-        location: 'Капот',
         severity: 'Лёгкая',
         comment: 'Мелкие сколы от камней',
       },
@@ -69,14 +56,12 @@ export const assessments: Assessment[] = [
       {
         id: 4,
         type: 'Трещина',
-        location: 'Бампер',
         severity: 'Сильная',
         comment: 'Трещина через весь передний бампер после удара',
       },
       {
         id: 5,
         type: 'Вмятина',
-        location: 'Крыло',
         severity: 'Средняя',
         comment: 'Переднее правое крыло деформировано',
       },
@@ -92,7 +77,6 @@ export const assessments: Assessment[] = [
       {
         id: 6,
         type: 'Царапина',
-        location: 'Дверь',
         severity: 'Лёгкая',
         comment: 'Царапина до грунта на задней правой двери',
       },
@@ -116,14 +100,12 @@ export const assessments: Assessment[] = [
       {
         id: 7,
         type: 'Вмятина',
-        location: 'Багажник',
         severity: 'Сильная',
         comment: 'Крышка багажника сильно замята, не закрывается',
       },
       {
         id: 8,
         type: 'Скол',
-        location: 'Крыша',
         severity: 'Лёгкая',
         comment: 'Скол краски на крыше',
       },
@@ -139,7 +121,6 @@ export const assessments: Assessment[] = [
       {
         id: 9,
         type: 'Царапина',
-        location: 'Крыло',
         severity: 'Средняя',
         comment: 'Длинная царапина вдоль заднего крыла',
       },
@@ -155,21 +136,18 @@ export const assessments: Assessment[] = [
       {
         id: 10,
         type: 'Трещина',
-        location: 'Капот',
         severity: 'Средняя',
         comment: 'Трещина на лакокрасочном покрытии капота',
       },
       {
         id: 11,
         type: 'Вмятина',
-        location: 'Дверь',
         severity: 'Лёгкая',
         comment: 'Небольшая вмятина от парковки',
       },
       {
         id: 12,
         type: 'Скол',
-        location: 'Бампер',
         severity: 'Средняя',
         comment: 'Сколы на углу переднего бампера',
       },
@@ -185,7 +163,6 @@ export const assessments: Assessment[] = [
       {
         id: 13,
         type: 'Царапина',
-        location: 'Крыша',
         severity: 'Лёгкая',
         comment: 'Потёртости на рейлингах и крыше',
       },

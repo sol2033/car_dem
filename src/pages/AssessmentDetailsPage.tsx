@@ -2,8 +2,8 @@ import { useState } from 'react'
 import { Badge, Button, Group, Image, Paper, Select, SimpleGrid, Stack, Text, Textarea, Title } from '@mantine/core'
 import { useNavigate, useParams } from 'react-router-dom'
 import DamageItem from '../components/DamageItem'
-import { damageLocations, damageSeverities, damageTypes, getAssessmentById, getUserName } from '../data/mockData'
-import type { Damage, DamageLocation, DamageSeverity, DamageType } from '../types'
+import { damageSeverities, damageTypes, getAssessmentById, getUserName } from '../data/mockData'
+import type { Damage, DamageSeverity, DamageType } from '../types'
 
 function AssessmentDetailsPage() {
   const navigate = useNavigate()
@@ -12,7 +12,6 @@ function AssessmentDetailsPage() {
 
   const [damages, setDamages] = useState<Damage[]>(assessment ? assessment.damages : [])
   const [type, setType] = useState<DamageType>('Скол')
-  const [location, setLocation] = useState<DamageLocation>('Бампер')
   const [severity, setSeverity] = useState<DamageSeverity>('Лёгкая')
   const [comment, setComment] = useState('')
 
@@ -31,7 +30,6 @@ function AssessmentDetailsPage() {
     const newDamage: Damage = {
       id: Date.now(),
       type: type,
-      location: location,
       severity: severity,
       comment: comment.trim(),
     }
@@ -107,13 +105,6 @@ function AssessmentDetailsPage() {
               value={type}
               allowDeselect={false}
               onChange={(value) => setType(value as DamageType)}
-            />
-            <Select
-              label="Место на кузове"
-              data={damageLocations}
-              value={location}
-              allowDeselect={false}
-              onChange={(value) => setLocation(value as DamageLocation)}
             />
             <Select
               label="Степень тяжести"
