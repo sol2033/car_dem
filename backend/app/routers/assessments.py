@@ -32,7 +32,10 @@ def create_assessment(
     model: str = Form(min_length=1, max_length=50),
     year: int = Form(ge=1950, le=2026),
     user_id: int = Form(),
-    photos: list[UploadFile] = File(default=[]),
+    photos: list[UploadFile] = File(
+        default=[],
+        json_schema_extra={"items": {"type": "string", "format": "binary"}},
+    ),
     db: Session = Depends(get_db),
 ):
     if crud.get_user(db, user_id) is None:
