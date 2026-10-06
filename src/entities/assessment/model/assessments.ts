@@ -1,29 +1,5 @@
-import type {
-  Assessment,
-  Car,
-  DamageSeverity,
-  DamageType,
-  User,
-} from '../types'
-
-export const damageTypes: DamageType[] = ['Скол', 'Вмятина', 'Царапина', 'Трещина']
-
-export const damageSeverities: DamageSeverity[] = ['Лёгкая', 'Средняя', 'Сильная']
-
-export const damageColors: Record<DamageType, string> = {
-  Скол: 'orange',
-  Вмятина: 'red',
-  Царапина: 'yellow',
-  Трещина: 'blue',
-}
-
-export const currentUserId = 1
-
-export const users: User[] = [
-  { id: 1, name: 'Иван Петров', email: 'ivan@example.com' },
-  { id: 2, name: 'Мария Смирнова', email: 'maria@example.com' },
-  { id: 3, name: 'Алексей Кузнецов', email: 'alexey@example.com' },
-]
+import { currentUserId } from '../../user/model/users'
+import type { Assessment, Car } from './types'
 
 export const assessments: Assessment[] = [
   {
@@ -191,11 +167,6 @@ export function getUserAssessments(userId: number): Assessment[] {
 
 export function getAssessmentById(id: number): Assessment | undefined {
   return assessments.find((assessment) => assessment.id === id)
-}
-
-export function getUserName(userId: number): string {
-  const user = users.find((user) => user.id === userId)
-  return user ? user.name : 'Неизвестный пользователь'
 }
 
 export function addAssessment(car: Car, photos: string[]): Assessment {

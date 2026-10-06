@@ -1,11 +1,11 @@
 import { Navigate, Route, Routes } from 'react-router-dom'
-import Layout from './components/Layout'
-import AdminPage from './pages/AdminPage'
-import AssessmentDetailsPage from './pages/AssessmentDetailsPage'
-import DashboardPage from './pages/DashboardPage'
-import LoginPage from './pages/LoginPage'
-import NewAssessmentPage from './pages/NewAssessmentPage'
-import RegisterPage from './pages/RegisterPage'
+import Layout from '../components/Layout'
+import AdminPage from '../pages/AdminPage'
+import AssessmentDetailsPage from '../pages/AssessmentDetailsPage'
+import DashboardPage from '../pages/DashboardPage'
+import LoginPage from '../pages/LoginPage'
+import NewAssessmentPage from '../pages/NewAssessmentPage'
+import RegisterPage from '../pages/RegisterPage'
 
 function App() {
   return (

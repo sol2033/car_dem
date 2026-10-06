@@ -1,6 +1,6 @@
 import { Badge, Button, Card, Group, Image, Text } from '@mantine/core'
 import { useNavigate } from 'react-router-dom'
-import type { Assessment } from '../types'
+import type { Assessment } from '../entities/assessment/model/types'
 
 interface AssessmentCardProps {
   assessment: Assessment

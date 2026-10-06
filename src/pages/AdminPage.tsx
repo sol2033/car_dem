@@ -1,6 +1,7 @@
 import { Badge, Button, Paper, Table, Text, Title } from '@mantine/core'
 import { useNavigate } from 'react-router-dom'
-import { assessments, getUserName } from '../data/mockData'
+import { assessments } from '../entities/assessment/model/assessments'
+import { getUserName } from '../entities/user/model/users'
 
 function AdminPage() {
   const navigate = useNavigate()
