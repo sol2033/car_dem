@@ -1,6 +1,6 @@
 import { Image } from '@mantine/core'
-import { damageColors } from '../entities/damage/model/constants'
-import type { Damage } from '../entities/damage/model/types'
+import { damageColors } from '../model/constants'
+import type { Damage } from '../model/types'
 
 interface PhotoWithBoxesProps {
   photo: string

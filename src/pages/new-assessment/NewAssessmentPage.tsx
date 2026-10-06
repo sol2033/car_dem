@@ -1,7 +1,7 @@
 import { useState } from 'react'
 import { Button, Group, Image, Paper, SimpleGrid, Stack, Text, TextInput, Title } from '@mantine/core'
 import { useNavigate } from 'react-router-dom'
-import { addAssessment } from '../entities/assessment/model/assessments'
+import { addAssessment } from '../../entities/assessment/model/assessments'
 
 function NewAssessmentPage() {
   const navigate = useNavigate()

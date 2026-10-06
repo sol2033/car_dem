@@ -1,5 +1,5 @@
 import { Badge, Button, Group, Paper, Text } from '@mantine/core'
-import type { Damage, DamageSeverity } from '../entities/damage/model/types'
+import type { Damage, DamageSeverity } from '../model/types'
 
 interface DamageItemProps {
   damage: Damage

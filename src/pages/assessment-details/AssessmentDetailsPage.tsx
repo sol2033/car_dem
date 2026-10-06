@@ -1,12 +1,12 @@
 import { useState } from 'react'
 import { Badge, Button, Group, Paper, Select, SimpleGrid, Stack, Text, Textarea, Title } from '@mantine/core'
 import { useNavigate, useParams } from 'react-router-dom'
-import DamageItem from '../components/DamageItem'
-import PhotoWithBoxes from '../components/PhotoWithBoxes'
-import { getAssessmentById } from '../entities/assessment/model/assessments'
-import { damageColors, damageSeverities, damageTypes } from '../entities/damage/model/constants'
-import type { Damage, DamageSeverity, DamageType } from '../entities/damage/model/types'
-import { getUserName } from '../entities/user/model/users'
+import DamageItem from '../../entities/damage/ui/DamageItem'
+import PhotoWithBoxes from '../../entities/damage/ui/PhotoWithBoxes'
+import { getAssessmentById } from '../../entities/assessment/model/assessments'
+import { damageColors, damageSeverities, damageTypes } from '../../entities/damage/model/constants'
+import type { Damage, DamageSeverity, DamageType } from '../../entities/damage/model/types'
+import { getUserName } from '../../entities/user/model/users'
 
 function AssessmentDetailsPage() {
   const navigate = useNavigate()

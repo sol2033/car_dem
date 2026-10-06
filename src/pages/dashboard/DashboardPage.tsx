@@ -1,8 +1,8 @@
 import { Button, Group, SimpleGrid, Text, Title } from '@mantine/core'
 import { useNavigate } from 'react-router-dom'
-import AssessmentCard from '../components/AssessmentCard'
-import { getUserAssessments } from '../entities/assessment/model/assessments'
-import { currentUserId, getUserName } from '../entities/user/model/users'
+import AssessmentCard from '../../entities/assessment/ui/AssessmentCard'
+import { getUserAssessments } from '../../entities/assessment/model/assessments'
+import { currentUserId, getUserName } from '../../entities/user/model/users'
 
 function DashboardPage() {
   const navigate = useNavigate()
