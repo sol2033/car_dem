@@ -1,12 +1,16 @@
 import { useState } from 'react'
-import { Badge, Button, Group, Paper, Select, SimpleGrid, Stack, Text, Textarea, Title } from '@mantine/core'
+import { Badge, Button, Group, SimpleGrid, Stack, Text, Title } from '@mantine/core'
 import { useNavigate, useParams } from 'react-router-dom'
+import { getAssessmentById } from '../../entities/assessment/model/assessments'
+import { damageColors, damageTypes } from '../../entities/damage/model/constants'
+import type { Damage } from '../../entities/damage/model/types'
+import DamageCountBadge from '../../entities/damage/ui/DamageCountBadge'
 import DamageItem from '../../entities/damage/ui/DamageItem'
 import PhotoWithBoxes from '../../entities/damage/ui/PhotoWithBoxes'
-import { getAssessmentById } from '../../entities/assessment/model/assessments'
-import { damageColors, damageSeverities, damageTypes } from '../../entities/damage/model/constants'
-import type { Damage, DamageSeverity, DamageType } from '../../entities/damage/model/types'
 import { getUserName } from '../../entities/user/model/users'
+import AddDamageForm from '../../features/add-damage/ui/AddDamageForm'
+import DeleteDamageButton from '../../features/delete-damage/ui/DeleteDamageButton'
+import { formatDate } from '../../shared/lib/formatDate'
 
 function AssessmentDetailsPage() {
   const navigate = useNavigate()
@@ -14,9 +18,6 @@ function AssessmentDetailsPage() {
   const assessment = getAssessmentById(Number(params.id))
 
   const [damages, setDamages] = useState<Damage[]>(assessment ? assessment.damages : [])
-  const [type, setType] = useState<DamageType>('Скол')
-  const [severity, setSeverity] = useState<DamageSeverity>('Лёгкая')
-  const [comment, setComment] = useState('')
 
   if (!assessment) {
     return (
@@ -29,15 +30,8 @@ function AssessmentDetailsPage() {
     )
   }
 
-  function handleAddDamage() {
-    const newDamage: Damage = {
-      id: Date.now(),
-      type: type,
-      severity: severity,
-      comment: comment.trim(),
-    }
-    setDamages([...damages, newDamage])
-    setComment('')
+  function handleAddDamage(damage: Damage) {
+    setDamages([...damages, damage])
   }
 
   function handleDeleteDamage(id: number) {
@@ -52,8 +46,7 @@ function AssessmentDetailsPage() {
             {assessment.car.brand} {assessment.car.model}
           </Title>
           <Text c="dimmed" size="sm">
-            {assessment.car.year} год, оценка №{assessment.id} от{' '}
-            {new Date(assessment.createdAt).toLocaleDateString('ru-RU')}
+            {assessment.car.year} год, оценка №{assessment.id} от {formatDate(assessment.createdAt)}
           </Text>
           <Text c="dimmed" size="sm">
             Владелец: {getUserName(assessment.userId)}
@@ -93,7 +86,7 @@ function AssessmentDetailsPage() {
 
       <Group mb="sm">
         <Title order={4}>Повреждения</Title>
-        <Badge color={damages.length > 0 ? 'orange' : 'green'}>Всего: {damages.length}</Badge>
+        <DamageCountBadge count={damages.length} prefix="Всего:" />
       </Group>
 
       {damages.length === 0 ? (
@@ -103,43 +96,16 @@ function AssessmentDetailsPage() {
       ) : (
         <Stack mb="xl">
           {damages.map((damage) => (
-            <DamageItem key={damage.id} damage={damage} onDelete={handleDeleteDamage} />
+            <DamageItem
+              key={damage.id}
+              damage={damage}
+              action={<DeleteDamageButton damageId={damage.id} onDelete={handleDeleteDamage} />}
+            />
           ))}
         </Stack>
       )}
 
-      <Paper p="lg" radius="md" withBorder>
-        <Title order={5} mb="md">
-          Добавить повреждение
-        </Title>
-        <Stack>
-          <Group grow align="flex-start">
-            <Select
-              label="Тип"
-              data={damageTypes}
-              value={type}
-              allowDeselect={false}
-              onChange={(value) => setType(value as DamageType)}
-            />
-            <Select
-              label="Степень тяжести"
-              data={damageSeverities}
-              value={severity}
-              allowDeselect={false}
-              onChange={(value) => setSeverity(value as DamageSeverity)}
-            />
-          </Group>
-          <Textarea
-            label="Комментарий"
-            placeholder="Например: вмятина на задней левой двери"
-            value={comment}
-            onChange={(event) => setComment(event.currentTarget.value)}
-          />
-          <Button onClick={handleAddDamage} style={{ alignSelf: 'flex-start' }}>
-            Добавить
-          </Button>
-        </Stack>
-      </Paper>
+      <AddDamageForm onAdd={handleAddDamage} />
     </div>
   )
 }

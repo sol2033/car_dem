@@ -1,9 +1,10 @@
-import { Badge, Button, Group, Paper, Text } from '@mantine/core'
+import type { ReactNode } from 'react'
+import { Badge, Group, Paper, Text } from '@mantine/core'
 import type { Damage, DamageSeverity } from '../model/types'
 
 interface DamageItemProps {
   damage: Damage
-  onDelete: (id: number) => void
+  action?: ReactNode
 }
 
 function getSeverityColor(severity: DamageSeverity) {
@@ -16,7 +17,7 @@ function getSeverityColor(severity: DamageSeverity) {
   return 'red'
 }
 
-function DamageItem({ damage, onDelete }: DamageItemProps) {
+function DamageItem({ damage, action }: DamageItemProps) {
   return (
     <Paper p="md" radius="md" withBorder>
       <Group justify="space-between" align="flex-start">
@@ -31,9 +32,7 @@ function DamageItem({ damage, onDelete }: DamageItemProps) {
             {damage.comment ? damage.comment : 'Без комментария'}
           </Text>
         </div>
-        <Button variant="subtle" color="red" onClick={() => onDelete(damage.id)}>
-          Удалить
-        </Button>
+        {action}
       </Group>
     </Paper>
   )

@@ -1,5 +1,7 @@
-import { Badge, Button, Card, Group, Image, Text } from '@mantine/core'
+import { Button, Card, Group, Image, Text } from '@mantine/core'
 import { useNavigate } from 'react-router-dom'
+import { formatDate } from '../../../shared/lib/formatDate'
+import DamageCountBadge from '../../damage/ui/DamageCountBadge'
 import type { Assessment } from '../model/types'
 
 interface AssessmentCardProps {
@@ -47,11 +49,9 @@ function AssessmentCard({ assessment, ownerName }: AssessmentCardProps) {
 
       <Group justify="space-between" mt="sm">
         <Text size="sm" c="dimmed">
-          {new Date(assessment.createdAt).toLocaleDateString('ru-RU')}
+          {formatDate(assessment.createdAt)}
         </Text>
-        <Badge color={assessment.damages.length > 0 ? 'orange' : 'green'}>
-          Повреждений: {assessment.damages.length}
-        </Badge>
+        <DamageCountBadge count={assessment.damages.length} prefix="Повреждений:" />
       </Group>
 
       <Button

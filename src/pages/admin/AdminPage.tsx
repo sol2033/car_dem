@@ -1,7 +1,9 @@
-import { Badge, Button, Paper, Table, Text, Title } from '@mantine/core'
+import { Button, Paper, Table, Text, Title } from '@mantine/core'
 import { useNavigate } from 'react-router-dom'
 import { assessments } from '../../entities/assessment/model/assessments'
+import DamageCountBadge from '../../entities/damage/ui/DamageCountBadge'
 import { getUserName } from '../../entities/user/model/users'
+import { formatDate } from '../../shared/lib/formatDate'
 
 function AdminPage() {
   const navigate = useNavigate()
@@ -35,13 +37,9 @@ function AdminPage() {
                 <Table.Td>
                   {assessment.car.brand} {assessment.car.model}, {assessment.car.year}
                 </Table.Td>
+                <Table.Td>{formatDate(assessment.createdAt)}</Table.Td>
                 <Table.Td>
-                  {new Date(assessment.createdAt).toLocaleDateString('ru-RU')}
-                </Table.Td>
-                <Table.Td>
-                  <Badge color={assessment.damages.length > 0 ? 'orange' : 'green'}>
-                    {assessment.damages.length}
-                  </Badge>
+                  <DamageCountBadge count={assessment.damages.length} />
                 </Table.Td>
                 <Table.Td>
                   <Button
