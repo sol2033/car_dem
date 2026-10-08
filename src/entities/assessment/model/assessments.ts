@@ -182,3 +182,24 @@ export function addAssessment(car: Car, photos: string[]): Assessment {
   assessments.push(newAssessment)
   return newAssessment
 }
+
+function wait(ms: number) {
+  return new Promise((resolve) => setTimeout(resolve, ms))
+}
+
+export async function fetchAssessments(userId: number | null): Promise<Assessment[]> {
+  await wait(700)
+  if (userId === null) {
+    return assessments
+  }
+  return getUserAssessments(userId)
+}
+
+export async function fetchAssessment(id: number): Promise<Assessment> {
+  await wait(700)
+  const assessment = getAssessmentById(id)
+  if (!assessment) {
+    throw new Error('Оценка не найдена')
+  }
+  return assessment
+}
