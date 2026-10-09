@@ -11,7 +11,7 @@ function LoginPage() {
         Вход в систему
       </Title>
 
-      <Paper p="xl" radius="md" withBorder>
+      <Paper className="appear" p="xl" radius="md" withBorder>
         <LoginForm onSuccess={() => navigate('/dashboard')} />
 
         <Text size="sm" ta="center" mt="md">

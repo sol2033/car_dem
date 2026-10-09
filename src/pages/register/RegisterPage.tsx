@@ -11,7 +11,7 @@ function RegisterPage() {
         Регистрация
       </Title>
 
-      <Paper p="xl" radius="md" withBorder>
+      <Paper className="appear" p="xl" radius="md" withBorder>
         <RegisterForm onSuccess={() => navigate('/dashboard')} />
 
         <Text size="sm" ta="center" mt="md">

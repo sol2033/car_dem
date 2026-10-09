@@ -41,7 +41,9 @@ function Layout() {
       </div>
 
       <Container size="lg" py="xl">
-        <Outlet />
+        <div key={location.pathname} className="appear">
+          <Outlet />
+        </div>
       </Container>
     </div>
   )

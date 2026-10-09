@@ -19,7 +19,7 @@ function getSeverityColor(severity: DamageSeverity) {
 
 function DamageItem({ damage, action }: DamageItemProps) {
   return (
-    <Paper p="md" radius="md" withBorder>
+    <Paper className="appear" p="md" radius="md" withBorder>
       <Group justify="space-between" align="flex-start">
         <div>
           <Group gap="xs" mb="xs">

@@ -13,7 +13,7 @@ function AssessmentCard({ assessment, ownerName }: AssessmentCardProps) {
   const navigate = useNavigate()
 
   return (
-    <Card shadow="sm" padding="md" radius="md" withBorder>
+    <Card className="appear lift" shadow="sm" padding="md" radius="md" withBorder>
       <Card.Section>
         {assessment.photos.length > 0 ? (
           <Image src={assessment.photos[0]} height={170} alt="Фото автомобиля" />
