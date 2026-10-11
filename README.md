@@ -118,7 +118,7 @@ Backend написан на Python с использованием FastAPI, да
 - **app/config.py** — настройки приложения, читаются из файла .env.
 - **app/database.py** — подключение к PostgreSQL и сессии БД.
 - **app/models.py** — модели SQLAlchemy.
-- **app/schemas.py** — схемы валидации запросов и ответов (Pydantic).
+- **app/schemas/** — схемы валидации (Pydantic): input.py — данные, которые присылает клиент (UserCreate, DamageCreate, AssessmentUpdate), output.py — данные, которые отдаёт сервер (UserOut, DamageOut, PhotoOut, AssessmentOut).
 - **app/crud.py** — операции с данными и бизнес-логика.
 - **app/detector.py** — поиск повреждений на фото с помощью модели компьютерного зрения.
 - **weights/** — файл готовой обученной модели.

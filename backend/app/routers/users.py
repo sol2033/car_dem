@@ -1,8 +1,10 @@
 from fastapi import APIRouter, Depends, HTTPException
 from sqlalchemy.orm import Session
 
-from app import crud, schemas
+from app import crud
 from app.database import get_db
+from app.schemas.input import UserCreate
+from app.schemas.output import UserOut
 
 router = APIRouter(prefix="/users", tags=["users"])
 
@@ -14,25 +16,25 @@ def get_user_or_404(user_id: int, db: Session):
     return user
 
 
-@router.post("", response_model=schemas.UserOut, status_code=201)
-def create_user(data: schemas.UserCreate, db: Session = Depends(get_db)):
+@router.post("", response_model=UserOut, status_code=201)
+def create_user(data: UserCreate, db: Session = Depends(get_db)):
     if crud.get_user_by_email(db, data.email):
         raise HTTPException(status_code=409, detail="Email уже зарегистрирован")
     return crud.create_user(db, data)
 
 
-@router.get("", response_model=list[schemas.UserOut])
+@router.get("", response_model=list[UserOut])
 def read_users(db: Session = Depends(get_db)):
     return crud.get_users(db)
 
 
-@router.get("/{user_id}", response_model=schemas.UserOut)
+@router.get("/{user_id}", response_model=UserOut)
 def read_user(user_id: int, db: Session = Depends(get_db)):
     return get_user_or_404(user_id, db)
 
 
-@router.put("/{user_id}", response_model=schemas.UserOut)
-def update_user(user_id: int, data: schemas.UserCreate, db: Session = Depends(get_db)):
+@router.put("/{user_id}", response_model=UserOut)
+def update_user(user_id: int, data: UserCreate, db: Session = Depends(get_db)):
     user = get_user_or_404(user_id, db)
     other = crud.get_user_by_email(db, data.email)
     if other and other.id != user.id:

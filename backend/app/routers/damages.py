@@ -1,8 +1,10 @@
 from fastapi import APIRouter, Depends, HTTPException
 from sqlalchemy.orm import Session
 
-from app import crud, schemas
+from app import crud
 from app.database import get_db
+from app.schemas.input import DamageCreate
+from app.schemas.output import DamageOut
 
 router = APIRouter(tags=["damages"])
 
@@ -21,32 +23,32 @@ def check_assessment(assessment_id: int, db: Session):
 
 @router.post(
     "/assessments/{assessment_id}/damages",
-    response_model=schemas.DamageOut,
+    response_model=DamageOut,
     status_code=201,
 )
 def create_damage(
-    assessment_id: int, data: schemas.DamageCreate, db: Session = Depends(get_db)
+    assessment_id: int, data: DamageCreate, db: Session = Depends(get_db)
 ):
     check_assessment(assessment_id, db)
     return crud.create_damage(db, assessment_id, data)
 
 
 @router.get(
-    "/assessments/{assessment_id}/damages", response_model=list[schemas.DamageOut]
+    "/assessments/{assessment_id}/damages", response_model=list[DamageOut]
 )
 def read_damages(assessment_id: int, db: Session = Depends(get_db)):
     check_assessment(assessment_id, db)
     return crud.get_damages(db, assessment_id)
 
 
-@router.get("/damages/{damage_id}", response_model=schemas.DamageOut)
+@router.get("/damages/{damage_id}", response_model=DamageOut)
 def read_damage(damage_id: int, db: Session = Depends(get_db)):
     return get_damage_or_404(damage_id, db)
 
 
-@router.put("/damages/{damage_id}", response_model=schemas.DamageOut)
+@router.put("/damages/{damage_id}", response_model=DamageOut)
 def update_damage(
-    damage_id: int, data: schemas.DamageCreate, db: Session = Depends(get_db)
+    damage_id: int, data: DamageCreate, db: Session = Depends(get_db)
 ):
     damage = get_damage_or_404(damage_id, db)
     return crud.update_damage(db, damage, data)

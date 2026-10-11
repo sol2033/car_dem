@@ -2,8 +2,9 @@ import os
 
 from sqlalchemy.orm import Session
 
-from app import detector, models, schemas
+from app import detector, models
 from app.config import settings
+from app.schemas.input import AssessmentUpdate, DamageCreate, UserCreate
 
 
 def get_users(db: Session):
@@ -18,7 +19,7 @@ def get_user_by_email(db: Session, email: str):
     return db.query(models.User).filter(models.User.email == email).first()
 
 
-def create_user(db: Session, data: schemas.UserCreate):
+def create_user(db: Session, data: UserCreate):
     user = models.User(name=data.name, email=data.email, password=data.password)
     db.add(user)
     db.commit()
@@ -26,7 +27,7 @@ def create_user(db: Session, data: schemas.UserCreate):
     return user
 
 
-def update_user(db: Session, user: models.User, data: schemas.UserCreate):
+def update_user(db: Session, user: models.User, data: UserCreate):
     user.name = data.name
     user.email = data.email
     user.password = data.password
@@ -83,7 +84,7 @@ def create_assessment(
 
 
 def update_assessment(
-    db: Session, assessment: models.Assessment, data: schemas.AssessmentUpdate
+    db: Session, assessment: models.Assessment, data: AssessmentUpdate
 ):
     assessment.brand = data.brand
     assessment.model = data.model
@@ -113,7 +114,7 @@ def get_damage(db: Session, damage_id: int):
     return db.get(models.Damage, damage_id)
 
 
-def create_damage(db: Session, assessment_id: int, data: schemas.DamageCreate):
+def create_damage(db: Session, assessment_id: int, data: DamageCreate):
     damage = models.Damage(
         type=data.type,
         severity=data.severity,
@@ -126,7 +127,7 @@ def create_damage(db: Session, assessment_id: int, data: schemas.DamageCreate):
     return damage
 
 
-def update_damage(db: Session, damage: models.Damage, data: schemas.DamageCreate):
+def update_damage(db: Session, damage: models.Damage, data: DamageCreate):
     damage.type = data.type
     damage.severity = data.severity
     damage.comment = data.comment

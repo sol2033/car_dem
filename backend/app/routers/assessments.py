@@ -4,9 +4,11 @@ import uuid
 from fastapi import APIRouter, Depends, File, Form, HTTPException, UploadFile
 from sqlalchemy.orm import Session
 
-from app import crud, schemas
+from app import crud
 from app.config import settings
 from app.database import get_db
+from app.schemas.input import AssessmentUpdate
+from app.schemas.output import AssessmentOut
 
 router = APIRouter(prefix="/assessments", tags=["assessments"])
 
@@ -26,7 +28,7 @@ def save_photo(photo: UploadFile):
     return filename
 
 
-@router.post("", response_model=schemas.AssessmentOut, status_code=201)
+@router.post("", response_model=AssessmentOut, status_code=201)
 def create_assessment(
     brand: str = Form(min_length=1, max_length=50),
     model: str = Form(min_length=1, max_length=50),
@@ -50,19 +52,19 @@ def create_assessment(
     return crud.create_assessment(db, brand, model, year, user_id, filenames)
 
 
-@router.get("", response_model=list[schemas.AssessmentOut])
+@router.get("", response_model=list[AssessmentOut])
 def read_assessments(user_id: int | None = None, db: Session = Depends(get_db)):
     return crud.get_assessments(db, user_id)
 
 
-@router.get("/{assessment_id}", response_model=schemas.AssessmentOut)
+@router.get("/{assessment_id}", response_model=AssessmentOut)
 def read_assessment(assessment_id: int, db: Session = Depends(get_db)):
     return get_assessment_or_404(assessment_id, db)
 
 
-@router.put("/{assessment_id}", response_model=schemas.AssessmentOut)
+@router.put("/{assessment_id}", response_model=AssessmentOut)
 def update_assessment(
-    assessment_id: int, data: schemas.AssessmentUpdate, db: Session = Depends(get_db)
+    assessment_id: int, data: AssessmentUpdate, db: Session = Depends(get_db)
 ):
     assessment = get_assessment_or_404(assessment_id, db)
     return crud.update_assessment(db, assessment, data)

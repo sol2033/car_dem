@@ -1,5 +1,6 @@
-from app import crud, schemas
+from app import crud
 from app.database import Base, SessionLocal, engine
+from app.schemas.input import UserCreate
 
 USERS = [
     ("Иван Петров", "ivan@example.com"),
@@ -14,7 +15,7 @@ def seed():
     for name, email in USERS:
         if crud.get_user_by_email(db, email) is None:
             crud.create_user(
-                db, schemas.UserCreate(name=name, email=email, password="123456")
+                db, UserCreate(name=name, email=email, password="123456")
             )
     db.close()
 

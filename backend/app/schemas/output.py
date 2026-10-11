@@ -1,16 +1,6 @@
 from datetime import datetime
-from typing import Literal
 
-from pydantic import BaseModel, ConfigDict, EmailStr, Field
-
-DamageType = Literal["Скол", "Вмятина", "Царапина", "Трещина"]
-DamageSeverity = Literal["Лёгкая", "Средняя", "Сильная"]
-
-
-class UserCreate(BaseModel):
-    name: str = Field(min_length=1, max_length=100)
-    email: EmailStr
-    password: str = Field(min_length=6, max_length=100)
+from pydantic import BaseModel, ConfigDict
 
 
 class UserOut(BaseModel):
@@ -19,12 +9,6 @@ class UserOut(BaseModel):
     email: str
 
     model_config = ConfigDict(from_attributes=True)
-
-
-class DamageCreate(BaseModel):
-    type: DamageType
-    severity: DamageSeverity
-    comment: str = Field(default="", max_length=300)
 
 
 class DamageOut(BaseModel):
@@ -46,12 +30,6 @@ class PhotoOut(BaseModel):
     url: str
 
     model_config = ConfigDict(from_attributes=True)
-
-
-class AssessmentUpdate(BaseModel):
-    brand: str = Field(min_length=1, max_length=50)
-    model: str = Field(min_length=1, max_length=50)
-    year: int = Field(ge=1950, le=2026)
 
 
 class AssessmentOut(BaseModel):
