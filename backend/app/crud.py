@@ -4,6 +4,7 @@ from sqlalchemy.orm import Session
 
 from app import detector, models
 from app.config import settings
+from app.security import hash_password
 from app.schemas.input import AssessmentUpdate, DamageCreate, UserCreate
 
 
@@ -20,7 +21,11 @@ def get_user_by_email(db: Session, email: str):
 
 
 def create_user(db: Session, data: UserCreate):
-    user = models.User(name=data.name, email=data.email, password=data.password)
+    user = models.User(
+        name=data.name,
+        email=data.email,
+        password_hash=hash_password(data.password),
+    )
     db.add(user)
     db.commit()
     db.refresh(user)
@@ -30,7 +35,7 @@ def create_user(db: Session, data: UserCreate):
 def update_user(db: Session, user: models.User, data: UserCreate):
     user.name = data.name
     user.email = data.email
-    user.password = data.password
+    user.password_hash = hash_password(data.password)
     db.commit()
     db.refresh(user)
     return user
