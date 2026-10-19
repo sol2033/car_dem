@@ -8,6 +8,9 @@ class Settings(BaseSettings):
     db_password: str
     db_name: str = "car_dem"
     upload_dir: str = "uploads"
+    secret_key: str
+    access_token_minutes: int = 15
+    refresh_token_days: int = 7
 
     model_config = SettingsConfigDict(env_file=".env")
 
