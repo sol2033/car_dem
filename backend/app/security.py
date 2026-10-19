@@ -1,3 +1,5 @@
+import hashlib
+import secrets
 from datetime import datetime, timedelta, timezone
 
 import bcrypt
@@ -27,3 +29,11 @@ def create_access_token(user_id: int):
 def decode_access_token(token: str):
     payload = jwt.decode(token, settings.secret_key, algorithms=[ALGORITHM])
     return int(payload["sub"])
+
+
+def create_refresh_token():
+    return secrets.token_urlsafe(32)
+
+
+def hash_refresh_token(token: str):
+    return hashlib.sha256(token.encode()).hexdigest()
