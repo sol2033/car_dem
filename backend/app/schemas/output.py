@@ -11,6 +11,17 @@ class UserOut(BaseModel):
     model_config = ConfigDict(from_attributes=True)
 
 
+class TokenOut(BaseModel):
+    access_token: str
+    refresh_token: str
+    token_type: str = "bearer"
+
+
+class AccessTokenOut(BaseModel):
+    access_token: str
+    token_type: str = "bearer"
+
+
 class DamageOut(BaseModel):
     id: int
     type: str
