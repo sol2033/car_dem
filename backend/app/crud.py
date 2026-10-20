@@ -13,10 +13,6 @@ from app.security import (
 from app.schemas.input import AssessmentUpdate, DamageCreate, UserCreate
 
 
-def get_users(db: Session):
-    return db.query(models.User).order_by(models.User.id).all()
-
-
 def get_user(db: Session, user_id: int):
     return db.get(models.User, user_id)
 
