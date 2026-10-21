@@ -10,12 +10,17 @@ from app.config import settings
 ALGORITHM = "HS256"
 
 
+def password_to_bytes(password: str):
+    # bcrypt учитывает только первые 72 байта пароля
+    return password.encode()[:72]
+
+
 def hash_password(password: str):
-    return bcrypt.hashpw(password.encode(), bcrypt.gensalt()).decode()
+    return bcrypt.hashpw(password_to_bytes(password), bcrypt.gensalt()).decode()
 
 
 def verify_password(password: str, password_hash: str):
-    return bcrypt.checkpw(password.encode(), password_hash.encode())
+    return bcrypt.checkpw(password_to_bytes(password), password_hash.encode())
 
 
 def create_access_token(user_id: int):
