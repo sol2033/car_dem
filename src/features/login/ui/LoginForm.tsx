@@ -1,6 +1,7 @@
 import { useState } from 'react'
 import type { FormEvent } from 'react'
-import { Button, PasswordInput, Stack, TextInput } from '@mantine/core'
+import { Alert, Button, PasswordInput, Stack, TextInput } from '@mantine/core'
+import { useAuth } from '../../auth/model/AuthContext'
 import { validateEmail, validateRequired } from '../../../shared/lib/validation'
 
 interface LoginFormProps {
@@ -8,12 +9,15 @@ interface LoginFormProps {
 }
 
 function LoginForm({ onSuccess }: LoginFormProps) {
+  const { login } = useAuth()
   const [email, setEmail] = useState('')
   const [password, setPassword] = useState('')
   const [emailError, setEmailError] = useState('')
   const [passwordError, setPasswordError] = useState('')
+  const [formError, setFormError] = useState('')
+  const [submitting, setSubmitting] = useState(false)
 
-  function handleSubmit(event: FormEvent<HTMLFormElement>) {
+  async function handleSubmit(event: FormEvent<HTMLFormElement>) {
     event.preventDefault()
 
     const newEmailError = validateEmail(email)
@@ -21,14 +25,25 @@ function LoginForm({ onSuccess }: LoginFormProps) {
     setEmailError(newEmailError)
     setPasswordError(newPasswordError)
 
-    if (newEmailError === '' && newPasswordError === '') {
+    if (newEmailError !== '' || newPasswordError !== '') {
+      return
+    }
+
+    setFormError('')
+    setSubmitting(true)
+    try {
+      await login(email, password)
       onSuccess()
+    } catch (error) {
+      setFormError(error instanceof Error ? error.message : 'Не удалось войти')
+      setSubmitting(false)
     }
   }
 
   return (
     <form onSubmit={handleSubmit}>
       <Stack>
+        {formError !== '' && <Alert color="red">{formError}</Alert>}
         <TextInput
           label="Email"
           placeholder="ivan@example.com"
@@ -43,7 +58,7 @@ function LoginForm({ onSuccess }: LoginFormProps) {
           error={passwordError}
           onChange={(event) => setPassword(event.currentTarget.value)}
         />
-        <Button type="submit" fullWidth mt="sm">
+        <Button type="submit" fullWidth mt="sm" loading={submitting}>
           Войти
         </Button>
       </Stack>

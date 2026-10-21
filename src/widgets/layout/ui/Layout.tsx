@@ -1,9 +1,16 @@
 import { Button, Container, Group, Text } from '@mantine/core'
 import { Outlet, useLocation, useNavigate } from 'react-router-dom'
+import { useAuth } from '../../../features/auth/model/AuthContext'
 
 function Layout() {
   const navigate = useNavigate()
   const location = useLocation()
+  const { user, logout } = useAuth()
+
+  async function handleLogout() {
+    await logout()
+    navigate('/login')
+  }
 
   return (
     <div>
@@ -14,6 +21,9 @@ function Layout() {
               Оценка повреждений авто
             </Text>
             <Group gap="xs">
+              <Text size="sm" c="dimmed">
+                {user?.name}
+              </Text>
               <Button
                 variant={location.pathname === '/dashboard' ? 'light' : 'subtle'}
                 onClick={() => navigate('/dashboard')}
@@ -32,7 +42,7 @@ function Layout() {
               >
                 Админ
               </Button>
-              <Button variant="outline" color="gray" onClick={() => navigate('/login')}>
+              <Button variant="outline" color="gray" onClick={handleLogout}>
                 Выйти
               </Button>
             </Group>

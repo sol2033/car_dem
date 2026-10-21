@@ -1,6 +1,7 @@
 import { useState } from 'react'
 import type { FormEvent } from 'react'
-import { Button, PasswordInput, Stack, TextInput } from '@mantine/core'
+import { Alert, Button, PasswordInput, Stack, TextInput } from '@mantine/core'
+import { register } from '../../../entities/user/api/authApi'
 import { validateEmail, validateRequired } from '../../../shared/lib/validation'
 
 interface RegisterFormProps {
@@ -14,6 +15,8 @@ function RegisterForm({ onSuccess }: RegisterFormProps) {
   const [nameError, setNameError] = useState('')
   const [emailError, setEmailError] = useState('')
   const [passwordError, setPasswordError] = useState('')
+  const [formError, setFormError] = useState('')
+  const [submitting, setSubmitting] = useState(false)
 
   function validatePassword() {
     if (password === '') {
@@ -25,7 +28,7 @@ function RegisterForm({ onSuccess }: RegisterFormProps) {
     return ''
   }
 
-  function handleSubmit(event: FormEvent<HTMLFormElement>) {
+  async function handleSubmit(event: FormEvent<HTMLFormElement>) {
     event.preventDefault()
 
     const newNameError = validateRequired(name, 'Введите имя')
@@ -35,14 +38,25 @@ function RegisterForm({ onSuccess }: RegisterFormProps) {
     setEmailError(newEmailError)
     setPasswordError(newPasswordError)
 
-    if (newNameError === '' && newEmailError === '' && newPasswordError === '') {
+    if (newNameError !== '' || newEmailError !== '' || newPasswordError !== '') {
+      return
+    }
+
+    setFormError('')
+    setSubmitting(true)
+    try {
+      await register(name, email, password)
       onSuccess()
+    } catch (error) {
+      setFormError(error instanceof Error ? error.message : 'Не удалось зарегистрироваться')
+      setSubmitting(false)
     }
   }
 
   return (
     <form onSubmit={handleSubmit}>
       <Stack>
+        {formError !== '' && <Alert color="red">{formError}</Alert>}
         <TextInput
           label="Имя"
           placeholder="Иван Петров"
@@ -64,7 +78,7 @@ function RegisterForm({ onSuccess }: RegisterFormProps) {
           error={passwordError}
           onChange={(event) => setPassword(event.currentTarget.value)}
         />
-        <Button type="submit" fullWidth mt="sm">
+        <Button type="submit" fullWidth mt="sm" loading={submitting}>
           Зарегистрироваться
         </Button>
       </Stack>

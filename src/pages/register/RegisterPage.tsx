@@ -12,7 +12,7 @@ function RegisterPage() {
       </Title>
 
       <Paper className="appear" p="xl" radius="md" withBorder>
-        <RegisterForm onSuccess={() => navigate('/dashboard')} />
+        <RegisterForm onSuccess={() => navigate('/login')} />
 
         <Text size="sm" ta="center" mt="md">
           Уже есть аккаунт? <Anchor onClick={() => navigate('/login')}>Войти</Anchor>
