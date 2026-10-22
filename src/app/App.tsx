@@ -19,7 +19,9 @@ function App() {
           <Route path="/dashboard" element={<DashboardPage />} />
           <Route path="/assessments/new" element={<NewAssessmentPage />} />
           <Route path="/assessments/:id" element={<AssessmentDetailsPage />} />
-          <Route path="/admin" element={<AdminPage />} />
+          <Route element={<ProtectedRoute adminOnly />}>
+            <Route path="/admin" element={<AdminPage />} />
+          </Route>
         </Route>
       </Route>
       <Route path="*" element={<Navigate to="/login" />} />

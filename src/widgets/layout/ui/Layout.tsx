@@ -36,12 +36,14 @@ function Layout() {
               >
                 Новая оценка
               </Button>
-              <Button
-                variant={location.pathname === '/admin' ? 'light' : 'subtle'}
-                onClick={() => navigate('/admin')}
-              >
-                Админ
-              </Button>
+              {user?.is_admin && (
+                <Button
+                  variant={location.pathname === '/admin' ? 'light' : 'subtle'}
+                  onClick={() => navigate('/admin')}
+                >
+                  Админ
+                </Button>
+              )}
               <Button variant="outline" color="gray" onClick={handleLogout}>
                 Выйти
               </Button>
