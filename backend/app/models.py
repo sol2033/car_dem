@@ -13,6 +13,7 @@ class User(Base):
     name = Column(String(100), nullable=False)
     email = Column(String(100), unique=True, nullable=False)
     password_hash = Column(String(100), nullable=False)
+    is_admin = Column(Boolean, default=False, nullable=False)
 
     assessments = relationship(
         "Assessment", back_populates="user", cascade="all, delete-orphan"

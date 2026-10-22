@@ -27,10 +27,19 @@ def get_current_user(
     return user
 
 
-def get_own_assessment(assessment_id: int, db: Session, user: models.User):
+def get_admin_user(user: models.User = Depends(get_current_user)):
+    if not user.is_admin:
+        raise HTTPException(status_code=403, detail="Доступ только для администратора")
+    return user
+
+
+def get_own_assessment(
+    assessment_id: int, db: Session, user: models.User, allow_admin: bool = False
+):
     assessment = crud.get_assessment(db, assessment_id)
     if assessment is None:
         raise HTTPException(status_code=404, detail="Оценка не найдена")
-    if assessment.user_id != user.id:
+    # администратору разрешён только просмотр (allow_admin=True)
+    if assessment.user_id != user.id and not (allow_admin and user.is_admin):
         raise HTTPException(status_code=403, detail="Нет доступа к этой оценке")
     return assessment

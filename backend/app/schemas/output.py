@@ -7,6 +7,7 @@ class UserOut(BaseModel):
     id: int
     name: str
     email: str
+    is_admin: bool
 
     model_config = ConfigDict(from_attributes=True)
 
