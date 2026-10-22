@@ -3,7 +3,7 @@ from sqlalchemy.orm import Session
 
 from app import crud, models
 from app.database import get_db
-from app.dependencies import get_current_user
+from app.dependencies import get_admin_user, get_current_user
 from app.schemas.input import UserCreate
 from app.schemas.output import UserOut
 
@@ -13,6 +13,14 @@ router = APIRouter(prefix="/users", tags=["users"])
 def check_own_user(user_id: int, current_user: models.User):
     if user_id != current_user.id:
         raise HTTPException(status_code=403, detail="Нет доступа к этому пользователю")
+
+
+@router.get("", response_model=list[UserOut])
+def read_users(
+    db: Session = Depends(get_db),
+    admin: models.User = Depends(get_admin_user),
+):
+    return crud.get_users(db)
 
 
 @router.get("/{user_id}", response_model=UserOut)

@@ -41,7 +41,7 @@ def read_damages(
     db: Session = Depends(get_db),
     current_user: models.User = Depends(get_current_user),
 ):
-    get_own_assessment(assessment_id, db, current_user)
+    get_own_assessment(assessment_id, db, current_user, allow_admin=True)
     return crud.get_damages(db, assessment_id)
 
 

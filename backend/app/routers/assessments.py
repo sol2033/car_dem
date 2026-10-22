@@ -7,7 +7,7 @@ from sqlalchemy.orm import Session
 from app import crud, models
 from app.config import settings
 from app.database import get_db
-from app.dependencies import get_current_user, get_own_assessment
+from app.dependencies import get_admin_user, get_current_user, get_own_assessment
 from app.schemas.input import AssessmentUpdate
 from app.schemas.output import AssessmentOut
 
@@ -51,13 +51,21 @@ def read_assessments(
     return crud.get_assessments(db, current_user.id)
 
 
+@router.get("/all", response_model=list[AssessmentOut])
+def read_all_assessments(
+    db: Session = Depends(get_db),
+    admin: models.User = Depends(get_admin_user),
+):
+    return crud.get_assessments(db)
+
+
 @router.get("/{assessment_id}", response_model=AssessmentOut)
 def read_assessment(
     assessment_id: int,
     db: Session = Depends(get_db),
     current_user: models.User = Depends(get_current_user),
 ):
-    return get_own_assessment(assessment_id, db, current_user)
+    return get_own_assessment(assessment_id, db, current_user, allow_admin=True)
 
 
 @router.put("/{assessment_id}", response_model=AssessmentOut)

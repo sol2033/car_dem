@@ -13,6 +13,10 @@ from app.security import (
 from app.schemas.input import AssessmentUpdate, DamageCreate, UserCreate
 
 
+def get_users(db: Session):
+    return db.query(models.User).order_by(models.User.id).all()
+
+
 def get_user(db: Session, user_id: int):
     return db.get(models.User, user_id)
 
@@ -86,13 +90,11 @@ def delete_user(db: Session, user: models.User):
     delete_files(filenames)
 
 
-def get_assessments(db: Session, user_id: int):
-    return (
-        db.query(models.Assessment)
-        .filter(models.Assessment.user_id == user_id)
-        .order_by(models.Assessment.created_at.desc())
-        .all()
-    )
+def get_assessments(db: Session, user_id: int | None = None):
+    query = db.query(models.Assessment)
+    if user_id is not None:
+        query = query.filter(models.Assessment.user_id == user_id)
+    return query.order_by(models.Assessment.created_at.desc()).all()
 
 
 def get_assessment(db: Session, assessment_id: int):
