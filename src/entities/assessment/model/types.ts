@@ -12,5 +12,6 @@ export interface Assessment {
   createdAt: string
   damages: Damage[]
   userId: number
+  ownerName: string
   photos: string[]
 }

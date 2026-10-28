@@ -53,6 +53,10 @@ class Assessment(Base):
         "Damage", back_populates="assessment", cascade="all, delete-orphan"
     )
 
+    @property
+    def owner_name(self):
+        return self.user.name
+
 
 class Photo(Base):
     __tablename__ = "photos"

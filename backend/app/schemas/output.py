@@ -51,6 +51,7 @@ class AssessmentOut(BaseModel):
     year: int
     created_at: datetime
     user_id: int
+    owner_name: str
     photos: list[PhotoOut]
     damages: list[DamageOut]
 

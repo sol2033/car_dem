@@ -1,8 +1,8 @@
 import { Button, Group, SimpleGrid, Text, Title } from '@mantine/core'
 import { useNavigate } from 'react-router-dom'
-import { fetchAssessments } from '../../entities/assessment/model/assessments'
+import { fetchAssessments } from '../../entities/assessment/api/assessmentApi'
 import AssessmentCard from '../../entities/assessment/ui/AssessmentCard'
-import { currentUserId, getUserName } from '../../entities/user/model/users'
+import { useAuth } from '../../features/auth/model/AuthContext'
 import { useAsyncData } from '../../shared/lib/useAsyncData'
 import EmptyState from '../../shared/ui/EmptyState'
 import ErrorState from '../../shared/ui/ErrorState'
@@ -10,7 +10,8 @@ import LoadingState from '../../shared/ui/LoadingState'
 
 function DashboardPage() {
   const navigate = useNavigate()
-  const { data, loading, error, reload } = useAsyncData(fetchAssessments, currentUserId)
+  const { user } = useAuth()
+  const { data, loading, error, reload } = useAsyncData(fetchAssessments, false)
 
   return (
     <div>
@@ -18,7 +19,7 @@ function DashboardPage() {
         <div>
           <Title order={2}>Мои оценки</Title>
           <Text c="dimmed" size="sm">
-            Пользователь: {getUserName(currentUserId)}
+            Пользователь: {user?.name}
           </Text>
         </div>
         <Button onClick={() => navigate('/assessments/new')}>Создать оценку</Button>

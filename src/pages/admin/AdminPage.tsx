@@ -1,8 +1,7 @@
 import { Button, Paper, Table, Text, Title } from '@mantine/core'
 import { useNavigate } from 'react-router-dom'
-import { fetchAssessments } from '../../entities/assessment/model/assessments'
+import { fetchAssessments } from '../../entities/assessment/api/assessmentApi'
 import DamageCountBadge from '../../entities/damage/ui/DamageCountBadge'
-import { getUserName } from '../../entities/user/model/users'
 import { formatDate } from '../../shared/lib/formatDate'
 import { useAsyncData } from '../../shared/lib/useAsyncData'
 import EmptyState from '../../shared/ui/EmptyState'
@@ -11,7 +10,7 @@ import LoadingState from '../../shared/ui/LoadingState'
 
 function AdminPage() {
   const navigate = useNavigate()
-  const { data, loading, error, reload } = useAsyncData(fetchAssessments, null)
+  const { data, loading, error, reload } = useAsyncData(fetchAssessments, true)
 
   return (
     <div>
@@ -45,7 +44,7 @@ function AdminPage() {
               {data.map((assessment) => (
                 <Table.Tr key={assessment.id}>
                   <Table.Td>{assessment.id}</Table.Td>
-                  <Table.Td>{getUserName(assessment.userId)}</Table.Td>
+                  <Table.Td>{assessment.ownerName}</Table.Td>
                   <Table.Td>
                     {assessment.car.brand} {assessment.car.model}, {assessment.car.year}
                   </Table.Td>
