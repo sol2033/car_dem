@@ -1,15 +1,18 @@
-import { useState } from 'react'
+import { useEffect, useState } from 'react'
 import type { ChangeEvent, FormEvent } from 'react'
-import { Button, Group, Image, SimpleGrid, Stack, Text, TextInput } from '@mantine/core'
+import { Button, Group, Image, SimpleGrid, Stack, Text, TextInput, Alert } from '@mantine/core'
 import type { Car } from '../../../entities/assessment/model/types'
 import { validateRequired } from '../../../shared/lib/validation'
 
 interface CreateAssessmentFormProps {
-  onSubmit: (car: Car, photos: string[]) => void
+  onSubmit: (car: Car, photos: File[]) => Promise<void>
   onCancel: () => void
 }
 
 function CreateAssessmentForm({ onSubmit, onCancel }: CreateAssessmentFormProps) {
+  const [files, setFiles] = useState<File[]>([])
+  const [saving, setSaving] = useState(false)
+  const [error, setError] = useState('')
   const [brand, setBrand] = useState('')
   const [model, setModel] = useState('')
   const [year, setYear] = useState('')
@@ -19,12 +22,15 @@ function CreateAssessmentForm({ onSubmit, onCancel }: CreateAssessmentFormProps)
   const [modelError, setModelError] = useState('')
   const [yearError, setYearError] = useState('')
 
+  useEffect(() => () => photos.forEach(URL.revokeObjectURL), [photos])
+
   function handlePhotosChange(event: ChangeEvent<HTMLInputElement>) {
     const files = event.target.files
     if (!files) {
       return
     }
 
+    setFiles(Array.from(files))
     const urls: string[] = []
     for (let i = 0; i < files.length; i++) {
       urls.push(URL.createObjectURL(files[i]))
@@ -37,13 +43,13 @@ function CreateAssessmentForm({ onSubmit, onCancel }: CreateAssessmentFormProps)
       return 'Укажите год выпуска'
     }
     const yearNumber = Number(year)
-    if (isNaN(yearNumber) || yearNumber < 1950 || yearNumber > 2026) {
+    if (!Number.isInteger(yearNumber) || yearNumber < 1950 || yearNumber > 2026) {
       return 'Год должен быть от 1950 до 2026'
     }
     return ''
   }
 
-  function handleSubmit(event: FormEvent<HTMLFormElement>) {
+  async function handleSubmit(event: FormEvent<HTMLFormElement>) {
     event.preventDefault()
 
     const newBrandError = validateRequired(brand, 'Укажите марку')
@@ -54,14 +60,24 @@ function CreateAssessmentForm({ onSubmit, onCancel }: CreateAssessmentFormProps)
     setYearError(newYearError)
 
     if (newBrandError === '' && newModelError === '' && newYearError === '') {
-      onSubmit({ brand: brand.trim(), model: model.trim(), year: Number(year) }, photos)
+      setSaving(true)
+      setError('')
+      try {
+        await onSubmit({ brand: brand.trim(), model: model.trim(), year: Number(year) }, files)
+      } catch (err) {
+        setError(err instanceof Error ? err.message : 'Не удалось создать оценку')
+      } finally {
+        setSaving(false)
+      }
     }
   }
 
   return (
     <form onSubmit={handleSubmit}>
       <Stack>
+        {error && <Alert color="red">{error}</Alert>}
         <TextInput
+          maxLength={50}
           label="Марка"
           placeholder="Toyota"
           value={brand}
@@ -69,6 +85,7 @@ function CreateAssessmentForm({ onSubmit, onCancel }: CreateAssessmentFormProps)
           onChange={(event) => setBrand(event.currentTarget.value)}
         />
         <TextInput
+          maxLength={50}
           label="Модель"
           placeholder="Camry"
           value={model}
@@ -103,8 +120,8 @@ function CreateAssessmentForm({ onSubmit, onCancel }: CreateAssessmentFormProps)
         )}
 
         <Group mt="sm">
-          <Button type="submit">Создать оценку</Button>
-          <Button variant="default" onClick={onCancel}>
+          <Button type="submit" loading={saving}>Создать оценку</Button>
+          <Button variant="default" disabled={saving} onClick={onCancel}>
             Отмена
           </Button>
         </Group>

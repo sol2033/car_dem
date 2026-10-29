@@ -1,14 +1,14 @@
 import { Paper, Title } from '@mantine/core'
 import { useNavigate } from 'react-router-dom'
-import { addAssessment } from '../../entities/assessment/model/assessments'
+import { createAssessment } from '../../entities/assessment/api/assessmentApi'
 import type { Car } from '../../entities/assessment/model/types'
 import CreateAssessmentForm from '../../features/create-assessment/ui/CreateAssessmentForm'
 
 function NewAssessmentPage() {
   const navigate = useNavigate()
 
-  function handleSubmit(car: Car, photos: string[]) {
-    const created = addAssessment(car, photos)
+  async function handleSubmit(car: Car, photos: File[]) {
+    const created = await createAssessment(car, photos)
     navigate('/assessments/' + created.id)
   }
 
