@@ -1,6 +1,6 @@
 import { Button } from '@mantine/core'
 import { useNavigate, useParams } from 'react-router-dom'
-import { fetchAssessment } from '../../entities/assessment/model/assessments'
+import { fetchAssessment } from '../../entities/assessment/api/assessmentApi'
 import { useAsyncData } from '../../shared/lib/useAsyncData'
 import ErrorState from '../../shared/ui/ErrorState'
 import LoadingState from '../../shared/ui/LoadingState'
@@ -26,7 +26,7 @@ function AssessmentDetailsPage() {
     )
   }
 
-  return <AssessmentDetails assessment={data} />
+  return <AssessmentDetails key={data.id} assessment={data} onChange={reload} />
 }
 
 export default AssessmentDetailsPage
