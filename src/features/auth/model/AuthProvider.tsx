@@ -15,6 +15,14 @@ function AuthProvider({ children }: AuthProviderProps) {
   const [loading, setLoading] = useState(getAccessToken() !== null)
 
   useEffect(() => {
+    function handleSessionExpired() {
+      setUser(null)
+    }
+    window.addEventListener('session-expired', handleSessionExpired)
+    return () => window.removeEventListener('session-expired', handleSessionExpired)
+  }, [])
+
+  useEffect(() => {
     if (getAccessToken() === null) {
       return
     }

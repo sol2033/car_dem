@@ -46,18 +46,38 @@ async function getErrorMessage(response: Response): Promise<string> {
   if (data && typeof data.detail === 'string') {
     return data.detail
   }
+  if (Array.isArray(data?.detail)) {
+    const fields: Record<string, string> = {
+      brand: 'Марка', model: 'Модель', year: 'Год выпуска', comment: 'Комментарий',
+      type: 'Тип повреждения', severity: 'Степень тяжести', email: 'Email',
+      name: 'Имя', password: 'Пароль', photos: 'Фотографии',
+    }
+    return data.detail.map((error: { loc: (string | number)[] }) => {
+      const field = String(error.loc[error.loc.length - 1])
+      return (fields[field] || field) + ': проверьте введённое значение'
+    }).join('. ')
+  }
   return 'Не удалось выполнить запрос'
 }
 
 export async function request<T>(path: string, options: RequestInit = {}): Promise<T> {
-  let response = await send(path, options)
-
-  // access token мог истечь: пробуем обновить его и повторить запрос один раз
-  if (response.status === 401 && getAccessToken() && (await refreshAccessToken())) {
+  let response: Response
+  try {
     response = await send(path, options)
+
+    // access token мог истечь: пробуем обновить его и повторить запрос один раз
+    if (response.status === 401 && getAccessToken() && (await refreshAccessToken())) {
+      response = await send(path, options)
+    }
+  } catch {
+    throw new Error('Нет связи с сервером. Проверьте, что backend запущен')
   }
 
   if (!response.ok) {
+    if (response.status === 401 && !path.startsWith('/auth/')) {
+      clearTokens()
+      window.dispatchEvent(new Event('session-expired'))
+    }
     throw new ApiError(await getErrorMessage(response), response.status)
   }
   if (response.status === 204) {
