@@ -39,7 +39,6 @@ def get_own_assessment(
     assessment = crud.get_assessment(db, assessment_id)
     if assessment is None:
         raise HTTPException(status_code=404, detail="Оценка не найдена")
-    # администратору разрешён только просмотр (allow_admin=True)
     if assessment.user_id != user.id and not (allow_admin and user.is_admin):
         raise HTTPException(status_code=403, detail="Нет доступа к этой оценке")
     return assessment
